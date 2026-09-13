@@ -29,6 +29,14 @@ func notesHandler(w http.ResponseWriter, r *http.Request) {
 			http.Error(w, "bad request", http.StatusBadRequest)
 			return
 		}
+
+		note.Title = strings.TrimSpace(note.Title)
+
+		if note.Title == "" {
+			http.Error(w, "bad request", http.StatusBadRequest)
+			return
+		}
+
 		note.ID = nextID
 		nextID++
 		notes = append(notes, note)
@@ -74,6 +82,13 @@ func noteByIDHandler(w http.ResponseWriter, r *http.Request) {
 		err = json.NewDecoder(r.Body).Decode(&updatedNote)
 
 		if err != nil {
+			http.Error(w, "bad request", http.StatusBadRequest)
+			return
+		}
+
+		updatedNote.Title = strings.TrimSpace(updatedNote.Title)
+
+		if updatedNote.Title == "" {
 			http.Error(w, "bad request", http.StatusBadRequest)
 			return
 		}
